@@ -10,3 +10,7 @@ type Event struct {
 	WeekOfMonth string
 	Website     string
 }
+
+type EventList struct {
+	EventSlice []Event
+}
