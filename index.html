@@ -2,8 +2,7 @@
 
 {{ range $dateString, $events := $carousel }}
     <div class='date-holder even'>
-        <h2 class='date full'>{{ $dateString }}</h2>
-
+        <h2 class='date full'>{{ formattedDate $dateString }}</h2>
         {{ range $event := $events}}
             <div class='message-or-event'>
                 <h3 class='subject'>{{$event.Name}}</h3>

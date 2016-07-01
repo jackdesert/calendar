@@ -7,7 +7,6 @@ import (
 	"html/template"
 	"log"
 	"net/http"
-	"strings"
 )
 
 func Calendar(w http.ResponseWriter, r *http.Request) {
@@ -17,18 +16,18 @@ func Calendar(w http.ResponseWriter, r *http.Request) {
 
 	funcMap := template.FuncMap{
 		// The name "title" is what the function will be called in the template text.
-		"title": strings.Title,
+		"formattedDate": event.FormattedDate,
 	}
 	log.Println(funcMap)
 
-	//	t, _ := template.New("abalone").Funcs(funcMap).ParseFiles("index.html")
-	t, _ := template.ParseFiles("index.html")
-	//t, _ := template.New("abalone").ParseFiles("index.html")
+	fileName := "index.html"
+	//t, _ := new(template.Template).Funcs(funcMap).ParseFiles(fileName)
+	t, _ := template.New("").Funcs(funcMap).ParseFiles(fileName)
 	log.Println("Template Defined")
 	//t.Funcs(funcMap)
 	//log.Println("Funcs Added")
 	//defer return500IfError(w)
-	t.Execute(w, carouselInStruct)
+	t.ExecuteTemplate(w, fileName, carouselInStruct)
 	//fmt.Fprintf(w, event.render())
 }
 

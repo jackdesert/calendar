@@ -11,6 +11,7 @@ import (
 // See https://golang.org/src/time/format.go
 // Note this has to be 2006 for it to work
 const dateFormat = "2006-01-02"
+const dateFormatPretty = "Monday, Jan 1"
 
 type Event struct {
 	Name         string
@@ -33,6 +34,11 @@ func All() []Event {
 		Event{Name: "Jam Skate", Time: "5", Hostess: "Diane", Venue: "The Slots", Address: "513 S Street", DaysOfWeek: "fri", WeeksOfMonth: "1"},
 		Event{Name: "hi", Time: "5", Hostess: "Charlie", Venue: "Bourbon", Address: "221 5th Street", DaysOfWeek: "thur", WeeksOfMonth: "5"},
 	}
+}
+
+func FormattedDate(dateString string) string {
+	timeFromDateString, _ := time.Parse(dateFormat, dateString)
+	return timeFromDateString.Format(dateFormatPretty)
 }
 
 func CarouselInStruct() CarouselHolder {
@@ -97,7 +103,7 @@ func (e Event) weekOfMonthMatch(time time.Time) bool {
 
 func (e Event) displayOn(dateString string) bool {
 
-	time, _ := time.Parse(dateFormat, dateString)
+	timeFromDateString, _ := time.Parse(dateFormat, dateString)
 
-	return e.dayOfWeekMatch(time) && e.weekOfMonthMatch(time)
+	return e.dayOfWeekMatch(timeFromDateString) && e.weekOfMonthMatch(timeFromDateString)
 }
