@@ -16,7 +16,9 @@
         {{ $carousel := .CarouselSlice }}
 
         {{ range $dateString, $events := $carousel }}
-            <div class='date-holder even'>
+            <div class="date-holder {{ oddOrEven }}">
+
+
                 <h2 class='date full'>{{ formattedDate $dateString }}</h2>
                 {{ range $event := $events}}
                     <div class='message-or-event'>

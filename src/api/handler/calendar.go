@@ -17,8 +17,12 @@ func Calendar(w http.ResponseWriter, r *http.Request) {
 	funcMap := template.FuncMap{
 		// The name "title" is what the function will be called in the template text.
 		"formattedDate": event.FormattedDate,
+		"oddOrEven":     event.OddOrEven,
 	}
 	log.Println(funcMap)
+
+	log.Println("oddoreven", event.OddOrEven)
+	event.RestartStripe()
 
 	fileName := "index.html"
 	//t, _ := new(template.Template).Funcs(funcMap).ParseFiles(fileName)

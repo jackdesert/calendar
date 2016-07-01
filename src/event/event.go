@@ -13,6 +13,8 @@ import (
 const dateFormat = "2006-01-02"
 const dateFormatPretty = "Monday, Jan 1"
 
+var stripeCounter = 0
+
 type Event struct {
 	Name         string
 	Time         string
@@ -31,14 +33,96 @@ type CarouselHolder struct {
 
 func All() []Event {
 	return []Event{
-		Event{Name: "Jam Skate", Time: "5", Hostess: "Diane", Venue: "The Slots", Address: "513 S Street", DaysOfWeek: "fri", WeeksOfMonth: "1"},
-		Event{Name: "hi", Time: "5", Hostess: "Charlie", Venue: "Bourbon", Address: "221 5th Street", DaysOfWeek: "thur", WeeksOfMonth: "5"},
+		Event{Name: "Jam Skate",
+			Time:         "8pm",
+			Hostess:      "Diane",
+			Venue:        "Skadium",
+			Address:      "1311 S Bowman Rd, Little Rock, AR",
+			DaysOfWeek:   "sun",
+			WeeksOfMonth: "all"},
+		Event{Name: "Open Mic (House of Art)",
+			Time:         "9pm",
+			Hostess:      "Chris James",
+			Venue:        "House of Art",
+			Address:      "North Little Rock",
+			DaysOfWeek:   "fri",
+			WeeksOfMonth: "all"},
+		Event{Name: "Free Hair Cuts (House of Art)",
+			Time:         "?? 10am - 12pm ??",
+			Hostess:      "??",
+			Venue:        "House of Art",
+			Address:      "North Little Rock",
+			DaysOfWeek:   "sat",
+			WeeksOfMonth: "3"},
+		Event{Name: "Art Walk (North Little Rock)",
+			Time:         "??",
+			Hostess:      "",
+			Venue:        "Various, including House of Art",
+			Address:      "North Little Rock",
+			DaysOfWeek:   "fri",
+			WeeksOfMonth: "3"},
+		Event{Name: "Art Walk",
+			Time:         "??",
+			Hostess:      "",
+			Venue:        "Various",
+			Address:      "Little Rock",
+			DaysOfWeek:   "fri",
+			WeeksOfMonth: "2"},
+		Event{Name: "Wine & Cheese",
+			Time:         "4pm - close",
+			Hostess:      "",
+			Venue:        "Crush Wine Bar",
+			Address:      "North Little Rock",
+			DaysOfWeek:   "tues, wed, thurs, fri, sat",
+			WeeksOfMonth: "all"},
+		Event{Name: "Club Level",
+			Time:         "8pm - 2am",
+			Hostess:      "",
+			Venue:        "Club Level",
+			Address:      "315 Main St, Little Rock, AR",
+			DaysOfWeek:   "fri, sat",
+			WeeksOfMonth: "all"},
+		Event{Name: "Standup Comedy",
+			Time:         "??--call first",
+			Hostess:      "",
+			Venue:        "The Joint",
+			Address:      "301 Main St, North Little Rock, AR",
+			DaysOfWeek:   "tues",
+			WeeksOfMonth: "all"},
+		Event{Name: "Comedy Improv",
+			Time:         "??--call first",
+			Hostess:      "",
+			Venue:        "The Joint",
+			Address:      "301 Main St, North Little Rock, AR",
+			DaysOfWeek:   "wed",
+			WeeksOfMonth: "all"},
+		Event{Name: "Music & Comedy",
+			Time:         "??",
+			Hostess:      "",
+			Venue:        "The Joint",
+			Address:      "301 Main St, North Little Rock, AR",
+			DaysOfWeek:   "thurs",
+			WeeksOfMonth: "4"},
 	}
 }
 
 func FormattedDate(dateString string) string {
 	timeFromDateString, _ := time.Parse(dateFormat, dateString)
 	return timeFromDateString.Format(dateFormatPretty)
+}
+
+func RestartStripe() {
+	stripeCounter = 1
+}
+
+func OddOrEven() string {
+	// TODO This will stripe fine if only one person accesses server at a time ;)
+	stripeCounter += 1
+	if (stripeCounter % 2) == 1 {
+		return "odd"
+	} else {
+		return "even"
+	}
 }
 
 func CarouselInStruct() CarouselHolder {
@@ -65,7 +149,7 @@ func Carousel() map[string][]Event {
 	dateMap := make(map[string][]Event)
 	now := time.Now()
 	log.Println("Now()", now)
-	for i := 0; i < 2; i++ {
+	for i := 0; i < 14; i++ {
 		//log.Println(i)
 		//log.Println(now)
 		dateString := now.Format(dateFormat)
