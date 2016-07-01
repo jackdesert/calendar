@@ -11,7 +11,7 @@ import (
 // See https://golang.org/src/time/format.go
 // Note this has to be 2006 for it to work
 const dateFormat = "2006-01-02"
-const dateFormatPretty = "Monday, Jan 1"
+const dateFormatPretty = "Monday, Jan 2"
 
 var stripeCounter = 0
 
@@ -39,6 +39,13 @@ func All() []Event {
 			Venue:        "Skadium",
 			Address:      "1311 S Bowman Rd, Little Rock, AR",
 			DaysOfWeek:   "sun",
+			WeeksOfMonth: "all"},
+		Event{Name: "CoDa",
+			Time:         "6:30pm",
+			Hostess:      "Miriam",
+			Venue:        "Central Church of Christ",
+			Address:      "823 W 6th St, Little Rock, AR",
+			DaysOfWeek:   "tues",
 			WeeksOfMonth: "all"},
 		Event{Name: "Open Mic (House of Art)",
 			Time:         "9pm",
@@ -95,6 +102,13 @@ func All() []Event {
 			Venue:        "The Joint",
 			Address:      "301 Main St, North Little Rock, AR",
 			DaysOfWeek:   "wed",
+			WeeksOfMonth: "all"},
+		Event{Name: "Artist Series (The Joint)",
+			Time:         "??",
+			Hostess:      "",
+			Venue:        "The Joint",
+			Address:      "301 Main St, North Little Rock, AR",
+			DaysOfWeek:   "thurs",
 			WeeksOfMonth: "all"},
 		Event{Name: "Music & Comedy",
 			Time:         "??",

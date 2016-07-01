@@ -42,3 +42,13 @@ Woops...no tests yet!
 
 Run It Locally
 --------------
+
+    make && bin/calendar
+
+
+Features to Add
+---------------
+
+  * Sort events by start time
+  * Point a domain name at it
+  * Teach it to respect central time
