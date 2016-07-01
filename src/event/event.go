@@ -1,10 +1,16 @@
 package event
 
 import (
+	//"github.com/davecgh/go-spew/spew"
+	"log"
 	"strconv"
 	"strings"
 	"time"
 )
+
+// See https://golang.org/src/time/format.go
+// Note this has to be 2006 for it to work
+const dateFormat = "2006-01-02"
 
 type Event struct {
 	Name         string
@@ -22,11 +28,60 @@ type EventList struct {
 	EventSlice []Event
 }
 
+func All() []Event {
+	return []Event{
+		Event{Name: "Jam Skate", Time: "5", Hostess: "Diane", Venue: "The Slots", Address: "513 S Street", DaysOfWeek: "fri", WeeksOfMonth: "1"},
+		Event{Name: "hi", Time: "5", Hostess: "Charlie", Venue: "Bourbon", Address: "221 5th Street", DaysOfWeek: "thur", WeeksOfMonth: "5"},
+	}
+}
+
+func AllInStruct() EventList {
+	return EventList{
+		EventSlice: All(),
+	}
+}
+
+func eventsMatchingDateString(dateString string) []Event {
+	events := make([]Event, 0)
+	for _, event := range All() {
+		log.Println("---")
+		log.Println(dateString)
+		log.Println(event.Name)
+		if event.displayOn(dateString) {
+			events = append(events, event)
+			log.Println("FOUND")
+		}
+	}
+	return events
+}
+
+func Carousel() map[string][]Event {
+	dateMap := make(map[string][]Event)
+	now := time.Now()
+	log.Println("Now()", now)
+	for i := 0; i < 2; i++ {
+		//log.Println(i)
+		//log.Println(now)
+		dateString := now.Format(dateFormat)
+		//log.Println(dateString)
+		dateMap[dateString] = eventsMatchingDateString(dateString)
+		now = now.Add(time.Duration(24) * time.Hour)
+	}
+
+	return dateMap
+}
+
 func (e Event) dayOfWeekMatch(time time.Time) bool {
 	weekday := time.Weekday()
+	log.Println("weekday: %i", weekday)
 	weekdayString := weekday.String()
+	log.Println("weekdaystring: %s", weekdayString)
 	weekdayAbbreviation := strings.ToLower(weekdayString)[0:3]
-	return strings.Contains(e.DaysOfWeek, weekdayAbbreviation)
+	log.Println("weekdayabbreviation: %s", weekdayAbbreviation)
+	log.Println("e.DaysOfWeek", e.DaysOfWeek)
+	result := strings.Contains(e.DaysOfWeek, weekdayAbbreviation)
+	log.Println("result: %s", result)
+	return result
 }
 
 func (e Event) weekOfMonthMatch(time time.Time) bool {
@@ -40,10 +95,9 @@ func (e Event) weekOfMonthMatch(time time.Time) bool {
 	return strings.Contains(e.WeeksOfMonth, weekOfMonthString)
 }
 
-func (e Event) DisplayOn(dateString string) bool {
+func (e Event) displayOn(dateString string) bool {
 
-	format := "2015-01-01"
-	time, _ := time.Parse(format, dateString)
+	time, _ := time.Parse(dateFormat, dateString)
 
 	return e.dayOfWeekMatch(time) && e.weekOfMonthMatch(time)
 }
