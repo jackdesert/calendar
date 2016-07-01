@@ -1,35 +1,59 @@
-{{ $carousel := .CarouselSlice }}
+<!DOCTYPE html>
+<head>
+  <meta content='LR Events' name='title'>
+  <meta content="What's going on today in Little Rock. All events are grouped by date of occurrence." name='description'>
+  <meta content='width=device-width, initial-scale=1.0' name='viewport'>
+  <title>LR Daily Dancer</title>
+  <link href='static/reset.css' rel='stylesheet' type='text/css'>
+  <link href='static/style.css' rel='stylesheet' type='text/css'>
+  <meta charset='utf-8'>
+</head>
+<body class=''>
+  <div id='content'>
+    <h1 id='title'>LR Dancer</h1>
+    <div id='subtitle'>Events in Little Rock</div>
 
-{{ range $dateString, $events := $carousel }}
-    <div class='date-holder even'>
-        <h2 class='date full'>{{ formattedDate $dateString }}</h2>
-        {{ range $event := $events}}
-            <div class='message-or-event'>
-                <h3 class='subject'>{{$event.Name}}</h3>
-                <div class='details hidden'>
+        {{ $carousel := .CarouselSlice }}
 
-                    <div class='website'>
-                        <div class='label'>Website:</div>
-                        <a href="{{$event.Website}}">{{.Name}}</a>
-                    </div>
+        {{ range $dateString, $events := $carousel }}
+            <div class='date-holder even'>
+                <h2 class='date full'>{{ formattedDate $dateString }}</h2>
+                {{ range $event := $events}}
+                    <div class='message-or-event'>
+                        <h3 class='subject'>{{$event.Name}}</h3>
+                        <div class='details hidden'>
 
-                    <div class='time'>
-                        <div class='label'>Time:</div>
-                        {{$event.Time}}
-                    </div>
+                            <div class='website'>
+                                <div class='label'>Website:</div>
+                                <a href="{{$event.Website}}">{{.Name}}</a>
+                            </div>
 
-                    <div class='hostess'>
-                        <div class='label'>Host:</div>
-                        {{$event.Hostess}}
+                            <div class='time'>
+                                <div class='label'>Time:</div>
+                                {{$event.Time}}
+                            </div>
+
+                            <div class='hostess'>
+                                <div class='label'>Host:</div>
+                                {{$event.Hostess}}
+                            </div>
+                            <div class='location'>
+                                <div class='label'>Venue:</div>
+                                {{$event.Venue}}
+                            </div>
+                        </div>
                     </div>
-                    <div class='location'>
-                        <div class='label'>Venue:</div>
-                        {{$event.Venue}}
-                    </div>
-                </div>
+                {{end}}
+
             </div>
+
         {{end}}
-
     </div>
-
-{{end}}
+    <div class='footer'>
+        created by
+        <a href='http://info.jackdesert.com' rel='nofollow' target='_blank'>Jack Desert</a>
+    </div>
+    <!-- Use CDN -->
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+    <script src='static/dancer.js'></script>
+</body>
