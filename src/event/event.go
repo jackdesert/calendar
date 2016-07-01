@@ -62,16 +62,16 @@ func All() []Event {
 			DaysOfWeek:   "sat",
 			WeeksOfMonth: "3"},
 		Event{Name: "Art Walk (North Little Rock)",
-			Time:         "??",
+			Time:         "5pm - 8pm",
 			Hostess:      "",
 			Venue:        "Various, including House of Art",
 			Address:      "North Little Rock",
 			DaysOfWeek:   "fri",
 			WeeksOfMonth: "3"},
 		Event{Name: "Art Walk",
-			Time:         "??",
+			Time:         "5pm - 8pm",
 			Hostess:      "",
-			Venue:        "Various",
+			Venue:        "River Market District plus Free Art Shuttle",
 			Address:      "Little Rock",
 			DaysOfWeek:   "fri",
 			WeeksOfMonth: "2"},
@@ -175,6 +175,36 @@ func Carousel() map[string][]Event {
 	return dateMap
 }
 
+func (e Event) Frequency() string {
+	numberMap := map[string]string{
+		"1": "First",
+		"2": "Second",
+		"3": "Third",
+		"4": "Fourth",
+		"5": "Fifth",
+	}
+	output := ""
+
+	numberSlice := strings.Split(e.WeeksOfMonth, ",")
+
+	if e.WeeksOfMonth == "all" {
+		output = "Every "
+
+	} else {
+
+		for _, number := range numberSlice {
+			output += numberMap[number] + " &"
+		}
+	}
+	// Remove trailing "&"
+	if strings.Contains(output, "&") {
+		output = output[0 : len(output)-1]
+	}
+
+	output += e.DaysOfWeek
+	return output
+}
+
 func (e Event) dayOfWeekMatch(time time.Time) bool {
 	weekday := time.Weekday()
 	log.Println("weekday: %i", weekday)
@@ -188,13 +218,16 @@ func (e Event) dayOfWeekMatch(time time.Time) bool {
 	return result
 }
 
-func (e Event) weekOfMonthMatch(time time.Time) bool {
+func (e Event) weekOfMonthMatch(t time.Time) bool {
 	if e.WeeksOfMonth == "all" {
 		return true
 	}
 
-	dayOfMonth := time.Day()
+	log.Println("formatted Date: ", t.Format(dateFormat))
+	dayOfMonth := t.Day()
+	log.Println("day of month: ", dayOfMonth)
 	weekOfMonth := ((dayOfMonth - 1) / 7) + 1
+	log.Println("weekOfMonth: ", weekOfMonth)
 	weekOfMonthString := strconv.Itoa(weekOfMonth)
 	return strings.Contains(e.WeeksOfMonth, weekOfMonthString)
 }

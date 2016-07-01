@@ -1,7 +1,15 @@
 Calendar
 ===========
 
-Tells when data was last updated in DBR
+This is a calendar app, based on the design of pdxdailydancer.com
+but this one instead of pulling from a mailing list,
+it only displays recurring events.
+
+Why?
+----
+
+Because I can never remember which event is on the third friday
+of every month, much less figure out which friday is the third one.
 
 
 Install Go
@@ -52,3 +60,5 @@ Features to Add
   * Sort events by start time
   * Point a domain name at it
   * Teach it to respect central time
+  * Add a note on each one: "Frequency: every 2nd thursday"
+  * Get times for free yoga and free meditation
