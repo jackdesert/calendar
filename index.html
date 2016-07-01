@@ -1,28 +1,36 @@
-{{ $events := .EventSlice }}
-{{ range $event := $events}}
-    <div class='message-or-event'>
-        <h3 class='subject'>{{$event.Name}}</h3>
-        <div class='details hidden'>
+{{ $carousel := .CarouselSlice }}
 
-            <div class='website'>
-                <div class='label'>Website:</div>
-                <a href="{{$event.Website}}">{{.Name}}</a>
-            </div>
+{{ range $dateString, $events := $carousel }}
+    <div class='date-holder even'>
+        <h2 class='date full'>{{ $dateString }}</h2>
 
-            <div class='time'>
-                <div class='label'>Time:</div>
-                {{$event.Time}}
-            </div>
+        {{ range $event := $events}}
+            <div class='message-or-event'>
+                <h3 class='subject'>{{$event.Name}}</h3>
+                <div class='details hidden'>
 
-            <div class='hostess'>
-                <div class='label'>Host:</div>
-                {{$event.Hostess}}
+                    <div class='website'>
+                        <div class='label'>Website:</div>
+                        <a href="{{$event.Website}}">{{.Name}}</a>
+                    </div>
+
+                    <div class='time'>
+                        <div class='label'>Time:</div>
+                        {{$event.Time}}
+                    </div>
+
+                    <div class='hostess'>
+                        <div class='label'>Host:</div>
+                        {{$event.Hostess}}
+                    </div>
+                    <div class='location'>
+                        <div class='label'>Venue:</div>
+                        {{$event.Venue}}
+                    </div>
+                </div>
             </div>
-            <div class='location'>
-                <div class='label'>Venue:</div>
-                {{$event.Venue}}
-            </div>
-        </div>
+        {{end}}
+
     </div>
-{{end}}
 
+{{end}}
