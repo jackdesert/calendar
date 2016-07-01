@@ -2,7 +2,7 @@ package handler
 
 import (
 	//"fmt"
-	"github.com/davecgh/go-spew/spew"
+	//"github.com/davecgh/go-spew/spew"
 	"github.com/jackdesert/calendar/src/event"
 	"html/template"
 	"net/http"
@@ -10,11 +10,11 @@ import (
 
 func Calendar(w http.ResponseWriter, r *http.Request) {
 
-	carousel := event.Carousel()
-	spew.Dump(carousel)
+	carouselInStruct := event.CarouselInStruct()
+	//spew.Dump(carousel)
 	t, _ := template.ParseFiles("index.html")
 	//defer return500IfError(w)
-	t.Execute(w, carousel)
+	t.Execute(w, carouselInStruct)
 	//fmt.Fprintf(w, event.render())
 }
 

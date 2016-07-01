@@ -24,8 +24,8 @@ type Event struct {
 }
 
 // Used to pass to an html template
-type EventList struct {
-	EventSlice []Event
+type CarouselHolder struct {
+	CarouselSlice map[string][]Event
 }
 
 func All() []Event {
@@ -35,9 +35,9 @@ func All() []Event {
 	}
 }
 
-func AllInStruct() EventList {
-	return EventList{
-		EventSlice: All(),
+func CarouselInStruct() CarouselHolder {
+	return CarouselHolder{
+		CarouselSlice: Carousel(),
 	}
 }
 
