@@ -1,8 +1,9 @@
 package event
 
 import (
-	//"github.com/davecgh/go-spew/spew"
+	"github.com/davecgh/go-spew/spew"
 	"log"
+	"regexp"
 	"sort"
 	"strconv"
 	"strings"
@@ -13,17 +14,22 @@ import (
 // Note this has to be 2006 for it to work
 const dateFormat = "2006-01-02"
 const dateFormatPretty = "Monday, Jan 2"
+const space = " "
+const dateFormatRegexp = "\\A\\d{4}-\\d{2}-\\d{2}\\z"
+const daysOfWeekRegexp = "\\A((mon|tues|wed|thurs|fri|sat|sun),? ?){1,7}\\z"
+const weeksOfMonthRegexp = "\\Aall|[1-5](,[1-5]){0,4}\\z"
 
 var stripeCounter = 0
 
 type Event struct {
 	Name         string
-	Time         string
-	Venue        string
-	Address      string
-	Hostess      string
+	Date         string // non-recurring events only
 	DaysOfWeek   string
 	WeeksOfMonth string
+	Address      string
+	Hostess      string
+	Time         string
+	Venue        string
 	Website      string
 }
 
@@ -34,6 +40,12 @@ type CarouselHolder struct {
 
 func All() []Event {
 	return []Event{
+		Event{Name: "Anderson's Party",
+			Date:    "2016-07-04",
+			Time:    "??",
+			Hostess: "Anderson",
+			Venue:   "Anderson's Apartment with cool balcony",
+			Address: ""},
 		Event{Name: "Jam Skate",
 			Time:         "8pm",
 			Hostess:      "Diane",
@@ -142,6 +154,13 @@ func All() []Event {
 	}
 }
 
+func ValidateAll() {
+	// Validate all events (Panics if error found)
+	for _, event := range All() {
+		event.validate()
+	}
+}
+
 func FormattedDate(dateString string) string {
 	timeFromDateString, _ := time.Parse(dateFormat, dateString)
 	return timeFromDateString.Format(dateFormatPretty)
@@ -207,7 +226,73 @@ func Carousel() map[string][]Event {
 	return dateMap
 }
 
+func (e Event) validate() {
+	// Must have a Name
+	if e.Name == "" {
+		spew.Dump(e)
+		panic("Event lacks Name")
+	}
+
+	// If Date is present, Weeks of Month and Days of Week must both be blank
+	if (e.Date != "") && (e.WeeksOfMonth != "" || e.DaysOfWeek != "") {
+		spew.Dump(e)
+		panic("Event has both a Date and one of (WeeksOfMonth, DaysOfWeek)")
+	}
+
+	// If Date is empty, Weeks of Month and Days of Week must be present
+	if (e.Date == "") && (e.WeeksOfMonth == "" || e.DaysOfWeek == "") {
+		spew.Dump(e)
+		panic("Event has no Date and is missing one or more of (WeeksOfMonth, DaysOfWeek)")
+	}
+
+	// Do not allow spaces outside of content
+	if strings.Trim(e.Address, space) != e.Address ||
+		strings.Trim(e.Date, space) != e.Date ||
+		strings.Trim(e.DaysOfWeek, space) != e.DaysOfWeek ||
+		strings.Trim(e.Hostess, space) != e.Hostess ||
+		strings.Trim(e.Name, space) != e.Name ||
+		strings.Trim(e.Venue, space) != e.Venue ||
+		strings.Trim(e.Website, space) != e.Website ||
+		strings.Trim(e.WeeksOfMonth, space) != e.WeeksOfMonth {
+		spew.Dump(e)
+		panic("Event has whitespace outside of content")
+	}
+
+	// Date (if present) must match format 2006-01-02
+	if e.Date != "" {
+		match, _ := regexp.Match(dateFormatRegexp, []byte(e.Date))
+		if match == false {
+			spew.Dump(e)
+			panic("Event has invalid Date format")
+		}
+	}
+
+	// DaysOfWeek (if present) must match format
+	if e.DaysOfWeek != "" {
+		match, _ := regexp.Match(daysOfWeekRegexp, []byte(e.DaysOfWeek))
+		if match == false {
+			spew.Dump(e)
+			panic("Event has invalid DaysOfWeek format")
+		}
+	}
+
+	// WeeksOfMonth (if present) must match format
+	if e.WeeksOfMonth != "" {
+		match, _ := regexp.Match(weeksOfMonthRegexp, []byte(e.WeeksOfMonth))
+		if match == false {
+			spew.Dump(e)
+			panic("Event has invalid WeeksOfMonth format")
+		}
+	}
+
+}
+
 func (e Event) Frequency() string {
+	if len(e.Date) > 0 {
+		t, _ := time.Parse(dateFormat, e.Date)
+		return t.Format(dateFormatPretty)
+	}
+
 	numberMap := map[string]string{
 		"1": "First",
 		"2": "Second",
@@ -264,9 +349,17 @@ func (e Event) weekOfMonthMatch(t time.Time) bool {
 	return strings.Contains(e.WeeksOfMonth, weekOfMonthString)
 }
 
+func (e Event) dateMatch(dateString string) bool {
+	return dateString == e.Date
+}
+
 func (e Event) displayOn(dateString string) bool {
 
 	timeFromDateString, _ := time.Parse(dateFormat, dateString)
+
+	if e.dateMatch(dateString) {
+		return true
+	}
 
 	return e.dayOfWeekMatch(timeFromDateString) && e.weekOfMonthMatch(timeFromDateString)
 }
