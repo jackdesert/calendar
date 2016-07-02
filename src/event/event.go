@@ -192,7 +192,8 @@ func eventsMatchingDateString(dateString string) []Event {
 
 func Carousel() map[string][]Event {
 	dateMap := make(map[string][]Event)
-	now := time.Now()
+	chicago, _ := time.LoadLocation("America/Chicago")
+	now := time.Now().In(chicago)
 	log.Println("Now()", now)
 	for i := 0; i < 14; i++ {
 		//log.Println(i)
