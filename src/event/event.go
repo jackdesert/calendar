@@ -3,6 +3,7 @@ package event
 import (
 	//"github.com/davecgh/go-spew/spew"
 	"log"
+	"sort"
 	"strconv"
 	"strings"
 	"time"
@@ -40,6 +41,13 @@ func All() []Event {
 			Address:      "1311 S Bowman Rd, Little Rock, AR",
 			DaysOfWeek:   "sun",
 			WeeksOfMonth: "all"},
+		Event{Name: "Quaker Meeting",
+			Time:         "11am",
+			Hostess:      "",
+			Venue:        "Right around the corner",
+			Address:      "",
+			DaysOfWeek:   "sun",
+			WeeksOfMonth: "all"},
 		Event{Name: "Farmer's Market",
 			Time:         "8am - noon",
 			Hostess:      "",
@@ -47,6 +55,13 @@ func All() []Event {
 			Address:      "",
 			DaysOfWeek:   "sat",
 			WeeksOfMonth: "all"},
+		Event{Name: "First Sunday Yoga",
+			Time:         "11am",
+			Hostess:      "",
+			Venue:        "Martha's Studio",
+			Address:      "",
+			DaysOfWeek:   "sun",
+			WeeksOfMonth: "1"},
 		Event{Name: "CoDa",
 			Time:         "6:30pm",
 			Hostess:      "Miriam",
@@ -146,6 +161,13 @@ func OddOrEven() string {
 	}
 }
 
+// Primitives for Sorting. See https://golang.org/pkg/sort/
+type ByTime []Event
+
+func (a ByTime) Len() int           { return len(a) }
+func (a ByTime) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
+func (a ByTime) Less(i, j int) bool { return a[i].Time < a[j].Time }
+
 func CarouselInStruct() CarouselHolder {
 	return CarouselHolder{
 		CarouselSlice: Carousel(),
@@ -163,6 +185,8 @@ func eventsMatchingDateString(dateString string) []Event {
 			log.Println("FOUND")
 		}
 	}
+
+	sort.Sort(ByTime(events))
 	return events
 }
 

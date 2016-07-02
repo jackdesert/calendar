@@ -13,7 +13,7 @@ func main() {
 
 	http.HandleFunc("/", handler.Calendar)
 
-	log.Println("Listening1...")
-	http.ListenAndServe(":3100", nil)
+	log.Println("Serving it Up...")
+	http.ListenAndServe(":3501", nil)
 
 }
