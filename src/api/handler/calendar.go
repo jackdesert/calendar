@@ -3,11 +3,25 @@ package handler
 import (
 	//"fmt"
 	//"github.com/davecgh/go-spew/spew"
+	"fmt"
 	"github.com/jackdesert/calendar/src/event"
 	"html/template"
 	"log"
 	"net/http"
+	"os"
+	"time"
 )
+
+func exitSoon() {
+	// Exit cleanly so bin/run_calendar_indefinitely.sh can restart it
+	time.Sleep(100 * time.Millisecond)
+	os.Exit(0)
+}
+
+func Exit(w http.ResponseWriter, r *http.Request) {
+	go exitSoon()
+	fmt.Fprintf(w, "Restarted\n")
+}
 
 func Calendar(w http.ResponseWriter, r *http.Request) {
 

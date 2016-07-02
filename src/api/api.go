@@ -13,6 +13,9 @@ func main() {
 	fs := http.FileServer(http.Dir("static"))
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
 
+	// Allow program to be killed
+	http.HandleFunc("/restart", handler.Exit)
+
 	http.HandleFunc("/", handler.Calendar)
 
 	log.Println("Serving it Up...")

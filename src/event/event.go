@@ -284,7 +284,6 @@ func (e Event) validate() {
 			panic("Event has invalid WeeksOfMonth format")
 		}
 	}
-
 }
 
 func (e Event) Frequency() string {
