@@ -1,8 +1,10 @@
 package event
 
 import (
+	"fmt"
 	"github.com/davecgh/go-spew/spew"
 	"log"
+	"net/url"
 	"regexp"
 	"sort"
 	"strconv"
@@ -45,13 +47,22 @@ func All() []Event {
 			Time:    "??",
 			Hostess: "Anderson",
 			Venue:   "Anderson's Apartment with cool balcony",
-			Address: ""},
+			Address: "519 E Capital Ave #3B, Little Rock AR"},
 		Event{Name: "Jam Skate",
 			Time:         "8pm",
-			Hostess:      "Diane",
-			Venue:        "Skadium",
+			Hostess:      "",
+			Website:      "https://docs.google.com/spreadsheets/d/1NhyV44IRbaxttZK-5zJCn1DeCh7o5WhRKKPcq-qKsBc/edit#gid=0",
+			Venue:        "Skatium",
 			Address:      "1311 S Bowman Rd, Little Rock, AR",
 			DaysOfWeek:   "sun",
+			WeeksOfMonth: "all"},
+		Event{Name: "Jam Skate Practice Session",
+			Time:         "8:30pm - 10:30pm",
+			Hostess:      "",
+			Website:      "https://docs.google.com/spreadsheets/d/1NhyV44IRbaxttZK-5zJCn1DeCh7o5WhRKKPcq-qKsBc/edit#gid=0",
+			Venue:        "Skatium",
+			Address:      "1311 S Bowman Rd, Little Rock, AR",
+			DaysOfWeek:   "thurs",
 			WeeksOfMonth: "all"},
 		Event{Name: "Quaker Meeting",
 			Time:         "11am",
@@ -67,6 +78,27 @@ func All() []Event {
 			Address:      "",
 			DaysOfWeek:   "sat",
 			WeeksOfMonth: "all"},
+		Event{Name: "Meditation @ the Library",
+			Time:         "12pm",
+			Hostess:      "",
+			Venue:        "Library---Lee Room",
+			Address:      "",
+			DaysOfWeek:   "mon",
+			WeeksOfMonth: "2"},
+		Event{Name: "Origami @ the Library",
+			Time:         "6pm",
+			Hostess:      "",
+			Venue:        "Library---5th floor",
+			Address:      "",
+			DaysOfWeek:   "wed",
+			WeeksOfMonth: "all"},
+		Event{Name: "Free Yoga @ the Library",
+			Time:         "4pm or 4:30pm",
+			Hostess:      "",
+			Venue:        "5th floor of Library",
+			Address:      "",
+			DaysOfWeek:   "mon",
+			WeeksOfMonth: "1"},
 		Event{Name: "First Sunday Yoga",
 			Time:         "11am",
 			Hostess:      "",
@@ -113,19 +145,28 @@ func All() []Event {
 			Time:         "4pm - close",
 			Hostess:      "",
 			Venue:        "Crush Wine Bar",
-			Address:      "North Little Rock",
+			Address:      "318 N Main St, North Little Rock, AR",
 			DaysOfWeek:   "tues, wed, thurs, fri, sat",
 			WeeksOfMonth: "all"},
 		Event{Name: "Club Level",
-			Time:         "8pm - 2am",
+			Time:         "9:30pm - 2am",
 			Hostess:      "",
-			Venue:        "Club Level",
+			Venue:        "Club Level. Free admission before 10pm, $10 after that. Best to arrive VERY LATE, as dancing gets hopping around 11 or 11:30.",
 			Address:      "315 Main St, Little Rock, AR",
 			DaysOfWeek:   "fri, sat",
 			WeeksOfMonth: "all"},
-		Event{Name: "Standup Comedy",
+		Event{Name: "Original Sketch Comedies",
+			Time:         "8pm--call 501-372-0210 for tickets ~ $20 ~ they do sell out",
+			Hostess:      "",
+			Website:      "http://www.thejointargenta.com/",
+			Venue:        "The Joint",
+			Address:      "301 Main St, North Little Rock, AR",
+			DaysOfWeek:   "fri,sat",
+			WeeksOfMonth: "all"},
+		Event{Name: "Tuesday Standup Comedy",
 			Time:         "??--call first",
 			Hostess:      "",
+			Website:      "http://www.thejointargenta.com/",
 			Venue:        "The Joint",
 			Address:      "301 Main St, North Little Rock, AR",
 			DaysOfWeek:   "tues",
@@ -134,6 +175,7 @@ func All() []Event {
 			Time:         "??--call first",
 			Hostess:      "",
 			Venue:        "The Joint",
+			Website:      "http://www.thejointargenta.com/",
 			Address:      "301 Main St, North Little Rock, AR",
 			DaysOfWeek:   "wed",
 			WeeksOfMonth: "all"},
@@ -141,12 +183,14 @@ func All() []Event {
 			Time:         "??",
 			Hostess:      "",
 			Venue:        "The Joint",
+			Website:      "http://www.thejointargenta.com/",
 			Address:      "301 Main St, North Little Rock, AR",
 			DaysOfWeek:   "thurs",
 			WeeksOfMonth: "all"},
 		Event{Name: "Music & Comedy",
 			Time:         "??",
 			Hostess:      "",
+			Website:      "http://www.thejointargenta.com/",
 			Venue:        "The Joint",
 			Address:      "301 Main St, North Little Rock, AR",
 			DaysOfWeek:   "thurs",
@@ -284,6 +328,11 @@ func (e Event) validate() {
 			panic("Event has invalid WeeksOfMonth format")
 		}
 	}
+}
+
+func (e Event) AddressUrl() string {
+	escapedQuery := url.QueryEscape(e.Address)
+	return fmt.Sprintf("https://www.google.com/search?q=%s", escapedQuery)
 }
 
 func (e Event) Frequency() string {

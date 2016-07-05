@@ -25,10 +25,12 @@
                         <h3 class='subject'>{{$event.Name}}</h3>
                         <div class='details hidden'>
 
-                            <div class='website'>
-                                <div class='label'>Website:</div>
-                                <a href="{{$event.Website}}">{{.Name}}</a>
-                            </div>
+                            {{ if $event.Website }}
+                                <div class='website'>
+                                    <div class='label'>Website:</div>
+                                    <a target='_blank' href="{{$event.Website}}">{{.Name}}</a>
+                                </div>
+                            {{ end }}
 
                             <div class='time'>
                                 <div class='label'>Time:</div>
@@ -41,7 +43,12 @@
                             </div>
                             <div class='location'>
                                 <div class='label'>Venue:</div>
-                                {{$event.Venue}}
+                                <div class='venue-and-address'>
+                                    <div class='venue'>{{$event.Venue}}</div>
+                                    <div class='address'>
+                                        <a target='_blank' href="{{$event.AddressUrl}}">{{$event.Address}}</a>
+                                    </div>
+                                </div>
                             </div>
                             <div class='time'>
                                 <div class='label'>Frequency:</div>

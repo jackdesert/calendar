@@ -1,8 +1,6 @@
 package handler
 
 import (
-	//"fmt"
-	//"github.com/davecgh/go-spew/spew"
 	"fmt"
 	"github.com/jackdesert/calendar/src/event"
 	"html/template"
