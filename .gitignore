@@ -2,3 +2,4 @@
 *.swo
 bin/
 input_files/
+vendor/

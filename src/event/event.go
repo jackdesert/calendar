@@ -42,12 +42,12 @@ type CarouselHolder struct {
 
 func All() []Event {
 	return []Event{
-		Event{Name: "Anderson's Party",
-			Date:    "2016-07-04",
-			Time:    "??",
-			Hostess: "Anderson",
-			Venue:   "Anderson's Apartment with cool balcony",
-			Address: "519 E Capital Ave #3B, Little Rock AR"},
+		Event{Name: "Central High Registration",
+			Date:    "2016-08-01",
+			Time:    "10am - 7pm; Parking passes are $20, first-come, first served",
+			Hostess: "",
+			Venue:   "Central High",
+			Address: ""},
 		Event{Name: "Jam Skate",
 			Time:         "8pm",
 			Hostess:      "",
@@ -258,7 +258,7 @@ func Carousel() map[string][]Event {
 	chicago, _ := time.LoadLocation("America/Chicago")
 	now := time.Now().In(chicago)
 	log.Println("Now()", now)
-	for i := 0; i < 14; i++ {
+	for i := 0; i < 30; i++ {
 		//log.Println(i)
 		//log.Println(now)
 		dateString := now.Format(dateFormat)
@@ -368,6 +368,10 @@ func (e Event) Frequency() string {
 
 	output += e.DaysOfWeek
 	return output
+}
+
+func (e Event) OneTimeOnly() bool {
+	return (e.Date != "")
 }
 
 func (e Event) dayOfWeekMatch(time time.Time) bool {

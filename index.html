@@ -21,7 +21,12 @@
 
                 <h2 class='date full'>{{ formattedDate $dateString }}</h2>
                 {{ range $event := $events}}
-                    <div class='message-or-event'>
+                {{ if $event.OneTimeOnly }}
+                    <!-- daily dancer uses "odd.duplicate" to mark in red -->
+                    <div class="message-or-event odd duplicate">
+                {{else}}
+                    <div class="message-or-event">
+                {{end}}
                         <h3 class='subject'>{{$event.Name}}</h3>
                         <div class='details hidden'>
 
