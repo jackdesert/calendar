@@ -23,6 +23,7 @@
                 {{ range $event := $events}}
                 {{ if $event.OneTimeOnly }}
                     <!-- daily dancer uses "odd.duplicate" to mark in red -->
+                    <!-- we use it here to demarcate events that only happen once-->
                     <div class="message-or-event odd duplicate">
                 {{else}}
                     <div class="message-or-event">

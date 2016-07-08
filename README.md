@@ -54,6 +54,12 @@ Run It Locally
     make && bin/calendar
 
 
+Domain Names
+------------
+
+whichfriday.com
+
+
 Features to Add
 ---------------
 
