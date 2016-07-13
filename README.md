@@ -58,6 +58,11 @@ Domain Names
 ------------
 
 whichfriday.com
+sexythursday.com
+amazingcalendar.com
+fuckingamazingcalendar.com
+jalendar.com
+favoritefriday.com
 
 
 Features to Add
