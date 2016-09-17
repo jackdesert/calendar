@@ -28,7 +28,8 @@
                 {{else}}
                     <div class="message-or-event">
                 {{end}}
-                        <h3 class='subject'>{{$event.Name}}</h3>
+                <h3 class='subject'>{{$event.Name}}</h3>
+                    {{$event.Time}}
                         <div class='details hidden'>
 
                             {{ if $event.Website }}

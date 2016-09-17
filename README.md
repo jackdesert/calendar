@@ -68,8 +68,5 @@ favoritefriday.com
 Features to Add
 ---------------
 
-  * Sort events by start time
-  * Point a domain name at it
+  * !!Sort events by start time
   * Teach it to respect central time
-  * Add a note on each one: "Frequency: every 2nd thursday"
-  * Get times for free yoga and free meditation
