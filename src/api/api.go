@@ -18,7 +18,7 @@ func main() {
 
 	http.HandleFunc("/", handler.Calendar)
 
-	log.Println("Serving it Up...")
+	log.Println("Serving it Up at on port 3501")
 	http.ListenAndServe(":3501", nil)
 
 }

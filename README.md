@@ -53,6 +53,11 @@ Run It Locally
 
     make && bin/calendar
 
+Deploy
+------
+
+alias deploy_calendar="rsync -avr bin config README.md static index.html $dofreecinc:calendar && curl calendar.jackdesert.com:3501/restart"
+
 
 Domain Names
 ------------

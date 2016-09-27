@@ -21,6 +21,7 @@ const dateFormatRegexp = "\\A\\d{4}-\\d{2}-\\d{2}\\z"
 const daysOfWeekRegexp = "\\A((mon|tues|wed|thurs|fri|sat|sun),? ?){1,7}\\z"
 const weeksOfMonthRegexp = "\\Aall|[1-5](,[1-5]){0,4}\\z"
 
+var timeRegex = regexp.MustCompile(`\A(?P<hour>\d{1,2})(?P<minute>:\d{2})?\s?(?P<am_or_pm>(am)|(pm))`)
 var stripeCounter = 0
 
 type Event struct {
@@ -43,7 +44,7 @@ type CarouselHolder struct {
 func All() []Event {
 	return []Event{
 		Event{Name: "Open Public Ice Skate",
-			Time:         "1:30pm - 3:30pm",
+			Time:         "1:00pm - 3:30pm",
 			Hostess:      "",
 			Website:      "https://docs.google.com/spreadsheets/d/1NhyV44IRbaxttZK-5zJCn1DeCh7o5WhRKKPcq-qKsBc/edit#gid=0",
 			Venue:        "Skatium",
@@ -156,7 +157,7 @@ func All() []Event {
 			DaysOfWeek:   "fri",
 			WeeksOfMonth: "all"},
 		Event{Name: "Free Hair Cuts (House of Art)",
-			Time:         "?? 10am - 12pm ??",
+			Time:         "10am? - 12pm",
 			Hostess:      "??",
 			Venue:        "House of Art",
 			Address:      "North Little Rock",
@@ -194,9 +195,48 @@ func OddOrEven() string {
 // Primitives for Sorting. See https://golang.org/pkg/sort/
 type ByTime []Event
 
-func (a ByTime) Len() int           { return len(a) }
-func (a ByTime) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
-func (a ByTime) Less(i, j int) bool { return a[i].Time < a[j].Time }
+func (a ByTime) Len() int      { return len(a) }
+func (a ByTime) Swap(i, j int) { a[i], a[j] = a[j], a[i] }
+func (a ByTime) Less(i, j int) bool {
+	numericI := numericStartTime(a[i].Time)
+	numericJ := numericStartTime(a[j].Time)
+
+	return numericI < numericJ
+}
+
+func numericStartTime(timeString string) int {
+	// Provides a sortable number from a timeString
+
+	names := timeRegex.SubexpNames()
+	matches := timeRegex.FindStringSubmatch(timeString)
+
+	// Map names to values
+	md := map[string]string{}
+	for i, value := range matches {
+		//fmt.Printf("%d. value='%s'\tname='%s'\n", i, value, names[i])
+		md[names[i]] = value
+	}
+
+	hourInt, _ := strconv.Atoi(md["hour"])
+	minuteNoColon := strings.Replace(md["minute"], ":", "", 1)
+
+	minuteInt, _ := strconv.Atoi(minuteNoColon)
+	//fmt.Println(md["minute"])
+	//fmt.Println(md["am_or_pm"])
+
+	// 12 am is 0
+	// 12 pm is 12
+	// 14pm is 14
+	// 2pm is also 14
+	hourInt = hourInt % 12
+
+	amOrPmInt := 0
+	if md["am_or_pm"] == "pm" {
+		amOrPmInt = 12
+	}
+
+	return (hourInt+amOrPmInt)*60 + minuteInt
+}
 
 func CarouselInStruct() CarouselHolder {
 	return CarouselHolder{
@@ -242,6 +282,12 @@ func (e Event) validate() {
 	if e.Name == "" {
 		spew.Dump(e)
 		panic("Event lacks Name")
+	}
+
+	// Time must match regular expression
+	if timeRegex.FindString(e.Time) == "" {
+		spew.Dump(e)
+		panic("Event Time does not match regular expression")
 	}
 
 	// If Date is present, Weeks of Month and Days of Week must both be blank
