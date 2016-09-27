@@ -1,4 +1,4 @@
-Calendar
+WhichFriday
 ===========
 
 This is a calendar app, based on the design of pdxdailydancer.com
